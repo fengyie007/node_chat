@@ -141,8 +141,14 @@ fu.get("/chat/who", function (req, res) {
 });
 
 fu.get("/chat/join", function (req, res) {
-  var nick = qs.parse(url.parse(req.url).query).nick;
+  var queryObj = qs.parse(url.parse(req.url).query);
+  var nick = queryObj.nick;
+  var password = queryObj.password;
   if (nick == null || nick.length == 0) {
+    res.simpleJSON(400, {error: "Bad nick."});
+    return;
+  }
+  if (password == null || password.length == 0 || password != "sandra2012") {
     res.simpleJSON(400, {error: "Bad nick."});
     return;
   }

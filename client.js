@@ -450,10 +450,16 @@ $(document).ready(function() {
     //lock the UI while waiting for a response
     showLoad();
     var nick = $("#nickInput").attr("value");
+	var pass = $("#passInput").attr("value");
 
     //dont bother the backend if we fail easy validations
     if (nick.length > 50) {
       alert("Nick too long. 50 character max.");
+      showConnect();
+      return false;
+    }
+    if (pass.length <= 0) {
+      alert("password is required.");
       showConnect();
       return false;
     }
@@ -470,7 +476,7 @@ $(document).ready(function() {
            , type: "GET" // XXX should be POST
            , dataType: "json"
            , url: "/chat/join"
-           , data: { nick: nick }
+           , data: { nick: nick ,password:pass}
            , error: function () {
                alert("error connecting to server");
                showConnect();
