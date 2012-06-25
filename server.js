@@ -122,13 +122,13 @@ setInterval(function () {
 
 fu.listen(Number(process.env.PORT || PORT), HOST);
 
-fu.get("/", fu.staticHandler("index.html"));
-fu.get("/style.css", fu.staticHandler("style.css"));
-fu.get("/client.js", fu.staticHandler("client.js"));
-fu.get("/jquery-1.2.6.min.js", fu.staticHandler("jquery-1.2.6.min.js"));
+fu.get("/chat", fu.staticHandler("index.html"));
+fu.get("/chat/style.css", fu.staticHandler("style.css"));
+fu.get("/chat/client.js", fu.staticHandler("client.js"));
+fu.get("/chat/jquery-1.2.6.min.js", fu.staticHandler("jquery-1.2.6.min.js"));
 
 
-fu.get("/who", function (req, res) {
+fu.get("/chat/who", function (req, res) {
   var nicks = [];
   for (var id in sessions) {
     if (!sessions.hasOwnProperty(id)) continue;
@@ -140,7 +140,7 @@ fu.get("/who", function (req, res) {
                       });
 });
 
-fu.get("/join", function (req, res) {
+fu.get("/chat/join", function (req, res) {
   var nick = qs.parse(url.parse(req.url).query).nick;
   if (nick == null || nick.length == 0) {
     res.simpleJSON(400, {error: "Bad nick."});
@@ -162,7 +162,7 @@ fu.get("/join", function (req, res) {
                       });
 });
 
-fu.get("/part", function (req, res) {
+fu.get("/chat/part", function (req, res) {
   var id = qs.parse(url.parse(req.url).query).id;
   var session;
   if (id && sessions[id]) {
@@ -172,7 +172,7 @@ fu.get("/part", function (req, res) {
   res.simpleJSON(200, { rss: mem.rss });
 });
 
-fu.get("/recv", function (req, res) {
+fu.get("/chat/recv", function (req, res) {
   if (!qs.parse(url.parse(req.url).query).since) {
     res.simpleJSON(400, { error: "Must supply since parameter" });
     return;
@@ -192,7 +192,7 @@ fu.get("/recv", function (req, res) {
   });
 });
 
-fu.get("/send", function (req, res) {
+fu.get("/chat/send", function (req, res) {
   var id = qs.parse(url.parse(req.url).query).id;
   var text = qs.parse(url.parse(req.url).query).text;
 

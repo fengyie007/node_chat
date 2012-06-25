@@ -314,7 +314,7 @@ function longPoll (data) {
   //make another request
   $.ajax({ cache: false
          , type: "GET"
-         , url: "/recv"
+         , url: "/chat/recv"
          , dataType: "json"
          , data: { since: CONFIG.last_message_time, id: CONFIG.id }
          , error: function () {
@@ -340,7 +340,7 @@ function send(msg) {
   if (CONFIG.debug === false) {
     // XXX should be POST
     // XXX should add to messages immediately
-    jQuery.get("/send", {id: CONFIG.id, text: msg}, function (data) { }, "json");
+    jQuery.get("/chat/send", {id: CONFIG.id, text: msg}, function (data) { }, "json");
   }
 }
 
@@ -424,7 +424,7 @@ function outputUsers () {
 
 //get a list of the users presently in the room, and add it to the stream
 function who () {
-  jQuery.get("/who", {}, function (data, status) {
+  jQuery.get("/chat/who", {}, function (data, status) {
     if (status != "success") return;
     nicks = data.nicks;
     outputUsers();
@@ -467,7 +467,7 @@ $(document).ready(function() {
     $.ajax({ cache: false
            , type: "GET" // XXX should be POST
            , dataType: "json"
-           , url: "/join"
+           , url: "/chat/join"
            , data: { nick: nick }
            , error: function () {
                alert("error connecting to server");
@@ -503,5 +503,5 @@ $(document).ready(function() {
 
 //if we can, notify the server that we're going away.
 $(window).unload(function () {
-  jQuery.get("/part", {id: CONFIG.id}, function (data) { }, "json");
+  jQuery.get("/chat/part", {id: CONFIG.id}, function (data) { }, "json");
 });
