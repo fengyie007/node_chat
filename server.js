@@ -32,7 +32,7 @@ var channel = new function () {
 
     switch (type) {
       case "msg":
-        util.puts("<" + nick + "> " + text);
+        //util.puts("<" + nick + "> " + text);
         break;
       case "join":
         util.puts(nick + " join");
