@@ -413,6 +413,8 @@ function onConnect (session) {
     CONFIG.unread = 0;
     updateTitle();
   });
+
+    longPoll();
 }
 
 //add a list of present chat members to the stream
@@ -496,12 +498,14 @@ $(document).ready(function() {
   //begin listening for updates right away
   //interestingly, we don't need to join a room to get its updates
   //we just don't show the chat stream to the user until we create a session
-  longPoll();
+
 
   showConnect();
 });
 
 //if we can, notify the server that we're going away.
 $(window).unload(function () {
-  jQuery.get("/chat/part", {id: CONFIG.id}, function (data) { }, "json");
+    if(CONFIG.id){
+      jQuery.get("/chat/part", {id: CONFIG.id}, function (data) { }, "json");
+    }
 });
