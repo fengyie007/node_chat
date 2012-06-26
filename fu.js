@@ -1,8 +1,12 @@
-var createServer = require("http").createServer;
-var readFile = require("fs").readFile;
+var https = require("https");
+var fs = require("fs");
 var util = require("util");
 var url = require("url");
+const crypto = require('crypto');
 DEBUG = false;
+
+var privateKey = fs.readFileSync('privatekey.pem').toString();
+var certificate = fs.readFileSync('certificate.pem').toString();
 
 var fu = exports;
 
@@ -20,7 +24,13 @@ var getMap = {};
 fu.get = function (path, handler) {
   getMap[path] = handler;
 };
-var server = createServer(function (req, res) {
+
+var options = {
+    key: privateKey,
+    cert: certificate
+};
+
+var server = https.createServer(options,function (req, res) {
   if (req.method === "GET" || req.method === "HEAD") {
     var handler = getMap[url.parse(req.url).pathname] || notFound;
 
@@ -45,7 +55,7 @@ var server = createServer(function (req, res) {
 
 fu.listen = function (port, host) {
   server.listen(port, host);
-  util.puts("Server at http://" + (host || "127.0.0.1") + ":" + port.toString() + "/");
+  util.puts("Server at https://" + (host || "127.0.0.1") + ":" + port.toString() + "/");
 };
 
 fu.close = function () { server.close(); };
@@ -66,7 +76,7 @@ fu.staticHandler = function (filename) {
     }
 
     util.puts("loading " + filename + "...");
-    readFile(filename, function (err, data) {
+    fs.readFile(filename, function (err, data) {
       if (err) {
         util.puts("Error loading " + filename);
       } else {
