@@ -152,7 +152,11 @@ util = {
     inputHtml = inputHtml.toString();
     return inputHtml.replace(/&/g, "&amp;")
                     .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;");
+                    .replace(/>/g, "&gt;")
+					.replace(/\r\n/g, "<br/>")
+					.replace(/\n/g, "<br/>")
+					.replace(/ /g, "&nbsp;")
+					.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
   }, 
 
   //pads n with zeros on the left,
